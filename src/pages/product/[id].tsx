@@ -2,10 +2,15 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
+
 import { useState } from "react";
+
 import Stripe from "stripe";
 import { stripe } from "../../lib/stripe";
 import { api } from "../../services/api";
+
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import {
     ImageContainer,
@@ -30,7 +35,41 @@ export default function Product({ product }: ProductProps) {
         useState(false);
 
     if (isFallback) {
-        return <p>Loading...</p>;
+        return (
+            <>
+                <Head>
+                    <title>Ignite Shop</title>
+                </Head>
+
+                <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                    <ProductContainer>
+                        <Skeleton width={576} height={656} />
+
+                        <ProductDetails>
+                            <Skeleton height={40} />
+                            <div>
+                                <Skeleton width={100} />
+                            </div>
+                            <div
+                                style={{
+                                    marginTop: "2.5rem",
+                                }}
+                            >
+                                <Skeleton count={4} />
+                            </div>
+
+                            <div
+                                style={{
+                                    marginTop: "auto",
+                                }}
+                            >
+                                <Skeleton height={60} />
+                            </div>
+                        </ProductDetails>
+                    </ProductContainer>
+                </SkeletonTheme>
+            </>
+        );
     }
 
     async function handleBuyProduct() {
