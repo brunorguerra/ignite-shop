@@ -7,7 +7,6 @@ import { useState } from "react";
 
 import Stripe from "stripe";
 import { stripe } from "../../lib/stripe";
-import { api } from "../../services/api";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -17,6 +16,7 @@ import {
     ProductContainer,
     ProductDetails,
 } from "../../styles/pages/product";
+import axios from "axios";
 
 interface ProductProps {
     product: {
@@ -76,7 +76,7 @@ export default function Product({ product }: ProductProps) {
         try {
             setIsLoadingCheckoutSession(true);
 
-            const response = await api.post("/checkout", {
+            const response = await axios.post("/api/checkout", {
                 priceId: product.defaultPriceId,
             });
             const { checkoutUrl } = await response.data;
